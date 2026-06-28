@@ -11,7 +11,6 @@ export function ParticipantPage() {
   const [selectedOption, setSelectedOption] = useState('')
   const [loading, setLoading] = useState(false)
   const [alreadyVoted, setAlreadyVoted] = useState(false)
-  const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
   useEffect(() => {
@@ -28,9 +27,7 @@ export function ParticipantPage() {
     }
 
     loadPoll()
-    return () => {
-      mounted = false
-    }
+    return () => { mounted = false }
   }, [pollId])
 
   useEffect(() => {
@@ -45,28 +42,21 @@ export function ParticipantPage() {
     if (!pollId || !selectedOption) return
 
     setLoading(true)
-    setMessage('')
     setError('')
 
     try {
-      await submitVote(pollId, {
-        selectedOption,
-        participantData: fieldsData || {},
-      })
-
+      await submitVote(pollId, { selectedOption, participantData: fieldsData || {} })
       window.localStorage.setItem(`poll_voted_${pollId}`, 'true')
       setAlreadyVoted(true)
-      setMessage('Voto registrado com sucesso! Obrigado por participar.')
     } catch (submitError) {
       const text = submitError?.message || ''
-      if (text.includes('ja votou')) {
+      if (text.includes('ja votou') || text.includes('already')) {
         window.localStorage.setItem(`poll_voted_${pollId}`, 'true')
         setAlreadyVoted(true)
-        setError('Este dispositivo ja votou nesta enquete.')
       } else if (text.includes('encerrada')) {
         setError('Esta enquete foi encerrada.')
       } else {
-        setError('Nao foi possivel enviar seu voto agora. Tente novamente.')
+        setError('Nao foi possivel enviar seu voto. Tente novamente.')
       }
     } finally {
       setLoading(false)
@@ -75,96 +65,134 @@ export function ParticipantPage() {
 
   if (notFound) {
     return (
-      <main className="page">
-        <section className="card">
+      <div className="vote-shell">
+        <div className="vote-card">
+          <p className="vote-brand">BAND FM JUINA</p>
           <h1>Enquete indisponivel</h1>
           <p>Confira o link e tente novamente.</p>
-        </section>
-      </main>
+        </div>
+      </div>
     )
   }
 
   if (!poll) {
     return (
-      <main className="page">
-        <section className="card">
-          <h1>Carregando enquete...</h1>
-        </section>
-      </main>
+      <div className="vote-shell">
+        <div className="vote-card">
+          <p className="vote-brand">BAND FM JUINA</p>
+          <div className="vote-spinner" />
+        </div>
+      </div>
+    )
+  }
+
+  if (alreadyVoted) {
+    const metrics = getPollMetrics(poll.options)
+    return (
+      <div className="vote-shell">
+        <div className="vote-card">
+          <p className="vote-brand">BAND FM JUINA</p>
+          <div className="vote-thanks">
+            <span className="vote-thanks-icon">✓</span>
+            <h2>Voto confirmado!</h2>
+            <p>Obrigado por participar.</p>
+          </div>
+          <h3 className="vote-results-title">Resultado parcial</h3>
+          <div className="vote-results">
+            {metrics.rows.map((row) => {
+              const isLeading = row.voteCount > 0 && row.voteCount === Math.max(...metrics.rows.map(r => r.voteCount))
+              return (
+                <div key={row.id} className="vote-result-row">
+                  <div className="vote-result-labels">
+                    <span>{row.text}</span>
+                    <strong>{row.percentage}%</strong>
+                  </div>
+                  <div className="vote-result-bar">
+                    <div
+                      className={`vote-result-fill ${isLeading ? 'is-leading' : ''}`}
+                      style={{ width: `${row.percentage}%` }}
+                    />
+                  </div>
+                  <span className="vote-result-count">{row.voteCount} voto(s)</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+      </div>
     )
   }
 
   const isClosed = poll.status === 'closed'
 
-  if (alreadyVoted) {
-    const metrics = getPollMetrics(poll.options)
-    return (
-      <main className="page">
-        <section className="card">
-          <h1>{poll.campaignName}</h1>
-          <p>{poll.question}</p>
-          <p className="success">Voto confirmado! Obrigado por participar.</p>
-          <h3>Parcial</h3>
-          {metrics.rows.map((row) => (
-            <div key={row.id} className="progress-row">
-              <span>{row.text}</span>
-              <strong>{row.percentage}%</strong>
-            </div>
-          ))}
-        </section>
-      </main>
-    )
-  }
-
   return (
-    <main className="page">
-      <section className="card">
-        <h1>{poll.campaignName}</h1>
-        <p>{poll.question}</p>
+    <div className="vote-shell">
+      <div className="vote-card">
+        <p className="vote-brand">BAND FM JUINA</p>
+        <h1 className="vote-campaign">{poll.campaignName}</h1>
+        <p className="vote-question">{poll.question}</p>
 
         {isClosed ? (
-          <p className="error">Esta enquete foi encerrada. Nao e mais possivel votar.</p>
+          <div className="vote-closed">
+            <span>🔒</span>
+            <p>Esta enquete foi encerrada.</p>
+          </div>
         ) : (
-          <form className="form" onSubmit={handleVoteSubmit}>
+          <form onSubmit={handleVoteSubmit} className="vote-form">
             {poll.participationFields?.map((field) => (
-              <label key={field}>
-                {field}
+              <div key={field} className="vote-field">
+                <label htmlFor={`field-${field}`}>{field}</label>
                 <input
+                  id={`field-${field}`}
+                  type="text"
                   value={fieldsData[field] || ''}
-                  onChange={(event) =>
-                    setFieldsData((current) => ({ ...current, [field]: event.target.value }))
+                  onChange={(e) =>
+                    setFieldsData((prev) => ({ ...prev, [field]: e.target.value }))
                   }
+                  placeholder={`Informe seu ${field.toLowerCase()}`}
                   required
                 />
-              </label>
+              </div>
             ))}
 
-            <div>
-              <h3>Escolha sua resposta</h3>
+            <p className="vote-choose-label">Escolha sua resposta</p>
+
+            <div className="vote-options">
               {poll.options?.map((option) => (
-                <label key={option.id} className="radio-row">
+                <label
+                  key={option.id}
+                  className={`vote-option ${selectedOption === option.id ? 'selected' : ''}`}
+                >
                   <input
                     type="radio"
                     name="voteOption"
                     value={option.id}
                     checked={selectedOption === option.id}
-                    onChange={(event) => setSelectedOption(event.target.value)}
+                    onChange={(e) => setSelectedOption(e.target.value)}
                     required
                   />
-                  {option.text}
+                  <span className="vote-option-check" />
+                  <span className="vote-option-text">{option.text}</span>
                 </label>
               ))}
             </div>
 
-            <button type="submit" disabled={loading}>
-              {loading ? 'Enviando...' : 'Enviar voto'}
+            {error && <p className="vote-error">{error}</p>}
+
+            <button
+              type="submit"
+              className="vote-submit"
+              disabled={loading || !selectedOption}
+            >
+              {loading ? (
+                <span className="vote-spinner-sm" />
+              ) : (
+                'Confirmar voto'
+              )}
             </button>
           </form>
         )}
-
-        {message && <p className="success">{message}</p>}
-        {error && <p className="error">{error}</p>}
-      </section>
-    </main>
+      </div>
+    </div>
   )
 }
