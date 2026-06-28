@@ -71,7 +71,7 @@ export function TvLivePage() {
       <section className="tv-banner">
         <div className="tv-banner-info">
           <div className="tv-top">
-            <span className="badge">{poll.tvLabel || 'BAND FM JUINA'}</span>
+            <span className="badge">PARTICIPE DA ENQUETE</span>
             <span className="tv-question">{poll.question}</span>
             <span className="tv-total">{metrics.totalVotes} votos</span>
           </div>
