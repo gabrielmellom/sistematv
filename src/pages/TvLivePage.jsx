@@ -5,7 +5,6 @@ import { getPoll } from '../api'
 import { getPollMetrics, getTvOptionsLayoutClass } from '../utils'
 
 const REFRESH_EVERY_MS = 10000
-const PUBLIC_BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL || window.location.origin
 
 export function TvLivePage() {
   const { pollId } = useParams()
@@ -62,7 +61,7 @@ export function TvLivePage() {
     )
   }
 
-  const voteUrl = `${PUBLIC_BASE_URL}/vote/${pollId}`
+  const voteUrl = `${window.location.origin}/vote/${pollId}`
   const metrics = getPollMetrics(poll.options)
   const leadingVotes = Math.max(0, ...metrics.rows.map((row) => row.voteCount))
   const layoutClass = getTvOptionsLayoutClass(metrics.rows.length)

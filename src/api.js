@@ -1,6 +1,14 @@
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8787'
 const ADMIN_TOKEN_KEY = 'admin_token'
 const VOTER_ID_KEY = 'voter_id'
+
+function apiUrl(path) {
+  const isLocal =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+
+  const base = isLocal ? 'http://localhost:8787' : ''
+  return `${base}${path}`
+}
 
 export function getVoterId() {
   let voterId = window.localStorage.getItem(VOTER_ID_KEY)
@@ -33,7 +41,7 @@ export function isAdminLoggedIn() {
 }
 
 export async function adminLogin(password) {
-  const response = await fetch(`${API_BASE_URL}/api/admin/login`, {
+  const response = await fetch(apiUrl('/api/admin/login'), {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify({ password }),
@@ -47,14 +55,14 @@ export function adminLogout() {
 }
 
 export async function getAdminPolls() {
-  const response = await fetch(`${API_BASE_URL}/api/polls`, {
+  const response = await fetch(apiUrl('/api/polls'), {
     headers: buildHeaders(true),
   })
   return parseResponse(response)
 }
 
 export async function createPoll(payload) {
-  const response = await fetch(`${API_BASE_URL}/api/polls`, {
+  const response = await fetch(apiUrl('/api/polls'), {
     method: 'POST',
     headers: buildHeaders(true),
     body: JSON.stringify(payload),
@@ -63,7 +71,7 @@ export async function createPoll(payload) {
 }
 
 export async function updatePoll(pollId, payload) {
-  const response = await fetch(`${API_BASE_URL}/api/polls/${pollId}`, {
+  const response = await fetch(apiUrl(`/api/polls/${pollId}`), {
     method: 'PUT',
     headers: buildHeaders(true),
     body: JSON.stringify(payload),
@@ -72,7 +80,7 @@ export async function updatePoll(pollId, payload) {
 }
 
 export async function deletePoll(pollId) {
-  const response = await fetch(`${API_BASE_URL}/api/polls/${pollId}`, {
+  const response = await fetch(apiUrl(`/api/polls/${pollId}`), {
     method: 'DELETE',
     headers: buildHeaders(true),
   })
@@ -80,12 +88,12 @@ export async function deletePoll(pollId) {
 }
 
 export async function getPoll(pollId) {
-  const response = await fetch(`${API_BASE_URL}/api/polls/${pollId}`)
+  const response = await fetch(apiUrl(`/api/polls/${pollId}`))
   return parseResponse(response)
 }
 
 export async function submitVote(pollId, payload) {
-  const response = await fetch(`${API_BASE_URL}/api/polls/${pollId}/vote`, {
+  const response = await fetch(apiUrl(`/api/polls/${pollId}/vote`), {
     method: 'POST',
     headers: buildHeaders(),
     body: JSON.stringify({ ...payload, voterId: getVoterId() }),
