@@ -907,9 +907,9 @@ button:disabled {
   justify-content: center;
   padding: 24px 16px;
   background:
-    radial-gradient(ellipse 70% 55% at 80% 5%, rgba(244, 121, 32, 0.22), transparent 55%),
-    radial-gradient(ellipse 50% 45% at 10% 90%, rgba(200, 80, 0, 0.15), transparent 55%),
-    linear-gradient(160deg, #0a0500 0%, #150a01 50%, #1e0d01 100%);
+    radial-gradient(ellipse 70% 55% at 80% 5%, rgba(77, 184, 72, 0.2), transparent 55%),
+    radial-gradient(ellipse 50% 45% at 10% 90%, rgba(30, 100, 25, 0.18), transparent 55%),
+    linear-gradient(160deg, #020d02 0%, #051505 50%, #071a07 100%);
 }
 
 .vote-card {
@@ -928,7 +928,7 @@ button:disabled {
 
 .vote-brand {
   display: inline-block;
-  background: #F47920;
+  background: #4DB848;
   color: #fff;
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
@@ -938,7 +938,7 @@ button:disabled {
   border-radius: 999px;
   margin: 0 0 18px;
   text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-  box-shadow: 0 0 14px rgba(244, 121, 32, 0.4);
+  box-shadow: 0 0 14px rgba(77, 184, 72, 0.45);
 }
 
 .vote-campaign {
@@ -991,8 +991,8 @@ button:disabled {
 }
 
 .vote-field input:focus {
-  border-color: #F47920;
-  background: rgba(244, 121, 32, 0.1);
+  border-color: #4DB848;
+  background: rgba(77, 184, 72, 0.08);
 }
 
 .vote-choose-label {
@@ -1028,9 +1028,9 @@ button:disabled {
 }
 
 .vote-option.selected {
-  background: rgba(244, 121, 32, 0.15);
-  border-color: #F47920;
-  box-shadow: 0 0 0 3px rgba(244, 121, 32, 0.15);
+  background: rgba(77, 184, 72, 0.14);
+  border-color: #4DB848;
+  box-shadow: 0 0 0 3px rgba(77, 184, 72, 0.14);
 }
 
 .vote-option input[type='radio'] {
@@ -1051,8 +1051,8 @@ button:disabled {
 }
 
 .vote-option.selected .vote-option-check {
-  border-color: #F47920;
-  background: #F47920;
+  border-color: #4DB848;
+  background: #4DB848;
 }
 
 .vote-option.selected .vote-option-check::after {
@@ -1093,9 +1093,9 @@ button:disabled {
   font-weight: 700;
   letter-spacing: 0.3px;
   cursor: pointer;
-  background: linear-gradient(135deg, #e65c00, #F47920, #ffaa40);
+  background: linear-gradient(135deg, #2d8c28, #4DB848, #7dd63a);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(244, 121, 32, 0.5);
+  box-shadow: 0 4px 20px rgba(77, 184, 72, 0.45);
   transition: opacity 0.2s, transform 0.12s;
   display: flex;
   align-items: center;
@@ -1125,11 +1125,11 @@ button:disabled {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e65c00, #F47920);
+  background: linear-gradient(135deg, #2d8c28, #4DB848);
   font-size: 26px;
   font-weight: 900;
   margin-bottom: 12px;
-  box-shadow: 0 4px 20px rgba(244, 121, 32, 0.5);
+  box-shadow: 0 4px 20px rgba(77, 184, 72, 0.45);
 }
 
 .vote-thanks h2 {
@@ -1172,7 +1172,7 @@ button:disabled {
 }
 
 .vote-result-labels strong {
-  color: #F47920;
+  color: #4DB848;
   font-size: 15px;
 }
 
@@ -1186,13 +1186,13 @@ button:disabled {
 .vote-result-fill {
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #e65c00, #F47920);
+  background: linear-gradient(90deg, #2d8c28, #4DB848);
   transition: width 0.6s ease;
 }
 
 .vote-result-fill.is-leading {
-  background: linear-gradient(90deg, #e65c00, #F47920, #ffaa40);
-  box-shadow: 0 0 8px rgba(244, 121, 32, 0.5);
+  background: linear-gradient(90deg, #2d8c28, #4DB848, #7dd63a);
+  box-shadow: 0 0 8px rgba(77, 184, 72, 0.45);
 }
 
 .vote-result-count {
@@ -1215,8 +1215,8 @@ button:disabled {
 .vote-spinner {
   width: 36px;
   height: 36px;
-  border: 3px solid rgba(244, 121, 32, 0.2);
-  border-top-color: #F47920;
+  border: 3px solid rgba(77, 184, 72, 0.2);
+  border-top-color: #4DB848;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 20px auto;
